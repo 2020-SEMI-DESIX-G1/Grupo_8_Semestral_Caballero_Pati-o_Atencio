@@ -1,0 +1,28 @@
+{
+  "name": "apex-tracker",
+  "version": "1.0.0",
+  "description": "An app to test Vue.js compability with this api tracker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server",
+    "client": "npm run serve --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Ax3",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "firebase": "^7.17.1",
+    "jshint": "^2.11.1",
+    "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0",
+    "stripe": "^8.79.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
