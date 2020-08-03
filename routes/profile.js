@@ -84,6 +84,18 @@ router.post('/api/v1/charge', async (req, res) => {
       intent.id,
       { payment_method: pm.id }
     ); console.log(confirm);
+
+    const subs = await stripe.subscriptions.create(
+      {
+        customer: customer.id,
+        items: [{price: 'gold'}],
+        default_payment_method: pm.id,
+        current_period_start: pm.created,
+        current_period_end: pm.created + 30,
+        cancel_at_period_end: false,
+      }
+    );
+
     /* const charge = await stripe.charges.create(
       {
         amount: req.body.amount,
@@ -94,6 +106,7 @@ router.post('/api/v1/charge', async (req, res) => {
       }
     ); console.log(charge);
     */
+
     res.send('success');
   } catch (error) {
     console.log(error);
@@ -101,29 +114,6 @@ router.post('/api/v1/charge', async (req, res) => {
         message: 'Server Error'
     });
   }
-
-    /* try {
-        const customer = stripe.customers.create({
-            email:  req.body.email,
-            // source: req.body.stripeToken
-        });
-        
-        // const data = await json(customer);
-
-        // if (data.errors && data.errors.length > 0) {
-        //     return res.status(404).json({
-        //         message: 'Error al crear el usuario en Stripe'
-        //     });
-        // }
-
-        res.send('request succeded');
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: 'Server Error'
-        });
-    } */
 });
 
 module.exports = router;
