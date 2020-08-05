@@ -84,30 +84,34 @@ router.post('/api/v1/charge', async (req, res) => {
       intent.id,
       { payment_method: pm.id }
     ); console.log(confirm);
+    
+    const prod = await stripe.products.create(
+      {name: 'Plan Noob'}
+    );console.log(prod);
+
+    const plan = await stripe.plans.create(
+      {
+        amount: 999,
+        currency: 'usd',
+        interval: 'month',
+        product: prod.id,
+      }
+    );console.log(plan);
 
     const subs = await stripe.subscriptions.create(
       {
         customer: customer.id,
-        items: [{price: 'gold'}],
+        items: [{
+          plan: plan.id
+        }],
         default_payment_method: pm.id,
-        current_period_start: pm.created,
-        current_period_end: pm.created + 30,
         cancel_at_period_end: false,
       }
-    );
+    );console.log(subs);
 
-    /* const charge = await stripe.charges.create(
-      {
-        amount: req.body.amount,
-        currency: 'usd',
-        source: 'tok_visa', //pma.id,// //req.body.stripeToken,
-        description: 'subscription payment',
-        customer: customer.id
-      }
-    ); console.log(charge);
-    */
-
-    res.send('success');
+    res.status(200).json({
+      message:'success'
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
